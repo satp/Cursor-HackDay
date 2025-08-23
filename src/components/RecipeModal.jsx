@@ -7,8 +7,7 @@ const RecipeModal = ({ recipe, onClose }) => {
 
   const tabs = [
     { id: 'ingredients', label: 'Ingredients' },
-    { id: 'steps', label: 'Steps' },
-    { id: 'notes', label: 'Notes' }
+    { id: 'steps', label: 'Steps' }
   ]
 
   const getDifficultyColor = (difficulty) => {
@@ -194,18 +193,7 @@ Time: ${recipe.time} | Difficulty: ${recipe.difficulty} | Spice: ${recipe.spice}
                 </motion.div>
               )}
 
-              {activeTab === 'notes' && (
-                <motion.div
-                  key="notes"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <h3 className="text-lg font-semibold text-white mb-4">Why This Fusion Works</h3>
-                  <p className="text-gray-300 leading-relaxed">{recipe.why_it_works}</p>
-                </motion.div>
-              )}
+
             </AnimatePresence>
           </div>
 

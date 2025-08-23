@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Clock, X } from 'lucide-react'
+import { X } from 'lucide-react'
 
 const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
   const cuisines = ['Italian', 'Chinese', 'Japanese', 'Korean', 'Indian', 'Mexican', 'Thai', 'Mediterranean', 'Middle Eastern', 'American']
@@ -43,21 +43,23 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
       <div className="space-y-8">
         {/* Main Ingredients Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">
-            Main ingredients
-          </label>
-          <input
-            type="text"
-            value={formData.mainIngredients}
-            onChange={(e) => onFormChange('mainIngredients', e.target.value)}
-            placeholder="E.g., chicken, broccoli, rice"
-            className="w-full px-4 py-3 bg-dark-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-200"
-          />
+          <div>
+            <label className="form-label">
+              Main Ingredients <span className="text-red-400">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.mainIngredients}
+              onChange={(e) => onFormChange('mainIngredients', e.target.value)}
+              placeholder="E.g., chicken, broccoli, rice"
+              className="w-full px-4 py-3 mt-3 bg-black border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-200"
+            />
+          </div>
         </div>
 
         {/* Cuisines */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">
+          <label className="form-label">
             Cuisines <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
@@ -68,7 +70,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
                 className={`pill-button ${
                   formData.cuisines.includes(cuisine)
                     ? formData.cuisines[0] === cuisine 
-                      ? 'pill-button-selected ring-2 ring-accent-400 ring-offset-2 ring-offset-dark-900' // Base cuisine highlight
+                      ? 'pill-button-base-cuisine' // Base cuisine with orange outline
                       : 'pill-button-selected'
                     : 'pill-button-unselected'
                 }`}
@@ -84,7 +86,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
 
         {/* Meal Type */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">
+          <label className="form-label">
             Meal Type <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
@@ -106,7 +108,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
 
         {/* Time Limit */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">
+          <label className="form-label">
             Time Limit <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
@@ -120,7 +122,6 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
                     : 'pill-button-unselected'
                 }`}
               >
-                <Clock className="w-4 h-4 mr-1" />
                 {time} min
               </button>
             ))}
@@ -129,7 +130,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
 
         {/* Difficulty */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">
+          <label className="form-label">
             Difficulty <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
@@ -151,7 +152,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
 
         {/* Spice Level */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">
+          <label className="form-label">
             Spice Level <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
@@ -173,7 +174,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
 
         {/* Equipment */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">
+          <label className="form-label">
             Equipment <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
@@ -205,22 +206,10 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
               : 'opacity-50 cursor-not-allowed'
           }`}
         >
-          {isLoading ? (
-            <div className="flex items-center justify-center">
-              <video 
-                autoPlay 
-                loop 
-                muted 
-                className="w-16 h-16 object-cover rounded-full"
-              >
-                <source src="/video.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          ) : (
-            'Generate 3 Recipes'
-          )}
+          Create Recipes
         </motion.button>
+
+
       </div>
     </div>
   )

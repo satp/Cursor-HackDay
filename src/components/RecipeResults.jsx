@@ -28,7 +28,8 @@ const RecipeResults = ({ recipes, onRecipeClick }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-3xl font-bold text-center mb-8 text-gradient"
+        className="text-3xl font-bold text-center mb-8 averia-serif-libre-bold"
+        style={{ color: '#f97316' }}
       >
         Your Fusion Recipes
       </motion.h2>
@@ -61,6 +62,7 @@ const RecipeResults = ({ recipes, onRecipeClick }) => {
               <div className="w-full h-full bg-gradient-to-br from-accent-500/20 to-teal-500/20 flex items-center justify-center group-hover:from-accent-500/30 group-hover:to-teal-500/30 transition-all duration-300" style={{ display: recipe.imageUrl ? 'none' : 'flex' }}>
                 <div className="text-4xl">🍽️</div>
               </div>
+
             </div>
             
             {/* Recipe Title */}
@@ -89,10 +91,7 @@ const RecipeResults = ({ recipes, onRecipeClick }) => {
               </div>
             </div>
             
-            {/* Why it works */}
-            <p className="text-gray-300 text-sm line-clamp-3">
-              <span className="font-semibold text-teal-400">Why it works:</span> {recipe.why_it_works}
-            </p>
+
           </motion.div>
         ))}
       </div>
