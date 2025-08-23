@@ -16,7 +16,14 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl lg:text-7xl font-bold mb-1 main-title leading-tight pb-2"
-            style={{ color: '#f97316', opacity: 1, transform: 'none' }}
+            style={{ 
+              color: '#f97316', 
+              opacity: 1, 
+              transform: 'none',
+              fontFamily: '"Averia Serif Libre", serif !important',
+              fontWeight: '700 !important',
+              fontStyle: 'normal !important'
+            }}
           >
             FlavorForge
           </motion.h1>

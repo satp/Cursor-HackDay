@@ -131,4 +131,77 @@
     font-weight: 700 !important;
     font-style: normal !important;
   }
+  
+  /* Force Averia Serif Libre on all elements with main-title class */
+  h1.main-title,
+  .main-title,
+  .main-title * {
+    font-family: "Averia Serif Libre", serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+  }
+  
+  /* Override any Tailwind font classes */
+  .font-bold.main-title,
+  .font-bold.main-title *,
+  h1.font-bold.main-title,
+  h1.font-bold.main-title * {
+    font-family: "Averia Serif Libre", serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+  }
+  
+  /* Force Averia Serif Libre on specific elements */
+  .text-5xl.main-title,
+  .text-7xl.main-title,
+  .lg\:text-7xl.main-title {
+    font-family: "Averia Serif Libre", serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+  }
+  
+  /* Target the exact motion.h1 element */
+  .motion-h1,
+  [class*="text-5xl"] [class*="main-title"],
+  [class*="text-7xl"] [class*="main-title"] {
+    font-family: "Averia Serif Libre", serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+  }
+  
+  /* Nuclear option - override everything for the main title */
+  .main-title,
+  .main-title *,
+  .main-title::before,
+  .main-title::after {
+    font-family: "Averia Serif Libre", serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+  }
+  
+  /* Last resort - target by element type and class combination */
+  h1.main-title,
+  h1[class*="main-title"],
+  h1[class*="text-5xl"],
+  h1[class*="text-7xl"] {
+    font-family: "Averia Serif Libre", serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+  }
+  
+  /* Override any potential Tailwind font utilities */
+  .font-bold,
+  .font-semibold,
+  .font-medium {
+    font-family: inherit;
+  }
+  
+  /* Ensure main-title overrides everything */
+  .main-title.font-bold,
+  .main-title.font-semibold,
+  .main-title.font-medium {
+    font-family: "Averia Serif Libre", serif !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+  }
 }

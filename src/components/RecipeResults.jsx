@@ -2,7 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Clock, Flame, Zap } from 'lucide-react'
 
-const RecipeResults = ({ recipes, onRecipeClick }) => {
+const RecipeResults = ({ recipes, onRecipeClick, onGetMoreRecipes }) => {
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'Easy': return 'bg-green-500/20 text-green-400 border-green-500/30'
@@ -89,11 +89,30 @@ const RecipeResults = ({ recipes, onRecipeClick }) => {
                 <Flame className="w-3 h-3 mr-1" />
                 {recipe.spice}
               </div>
+              {/* Cuisine Badge */}
+              {(recipe.cuisine || recipe.cuisines) && (
+                <div className="flex items-center px-2 py-1 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded-full text-xs">
+                  <span className="mr-1">🍽️</span>
+                  {recipe.cuisine || (recipe.cuisines && recipe.cuisines[0]) || 'Fusion'}
+                </div>
+              )}
             </div>
             
 
           </motion.div>
         ))}
+      </div>
+      
+      {/* Get More Recipes Button */}
+      <div className="text-center mt-8">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onGetMoreRecipes}
+          className="px-8 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold rounded-xl hover:from-orange-700 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-orange-500/25"
+        >
+          Get More Recipes
+        </motion.button>
       </div>
     </div>
   )

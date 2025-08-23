@@ -67,6 +67,39 @@ function App() {
     setShowModal(true)
   }
 
+  const handleGetMoreRecipes = async () => {
+    setIsLoading(true)
+    
+    try {
+      // Call the backend API to get more recipes
+      const response = await fetch('http://localhost:5000/api/generate-recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to generate more recipes')
+      }
+      
+      // Add new recipes to existing ones
+      setRecipes(prev => [...prev, ...data.recipes])
+    } catch (error) {
+      console.error('Error generating more recipes:', error)
+      alert('Failed to generate more recipes. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
 
 
   return (
@@ -92,13 +125,16 @@ function App() {
           
           {/* Video - Right Side */}
           <div className="w-2/5">
-            <div className="sticky top-8">
-              <div className="w-full h-96 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="sticky top-8 flex items-center h-full">
+              <div className="w-full h-[500px] rounded-2xl overflow-hidden shadow-2xl">
                 <video 
                   autoPlay 
                   loop 
                   muted 
+                  playsInline
+                  preload="auto"
                   className="w-full h-full object-cover"
+                  style={{ willChange: 'auto' }}
                 >
                   <source src="/video.mp4" type="video/mp4" />
                   <div className="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
@@ -193,6 +229,7 @@ function App() {
               <RecipeResults 
                 recipes={recipes}
                 onRecipeClick={handleRecipeClick}
+                onGetMoreRecipes={handleGetMoreRecipes}
               />
             </motion.div>
           </motion.div>
