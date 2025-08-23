@@ -11,10 +11,12 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
   const equipment = ['Stovetop', 'Oven', 'Air-fryer', 'Instant Pot', 'Grill', 'Blender', 'Microwave']
 
   const handleCuisineToggle = (cuisine) => {
-    if (formData.additionalCuisines.includes(cuisine)) {
-      onFormChange('additionalCuisines', formData.additionalCuisines.filter(c => c !== cuisine))
+    if (formData.cuisines.includes(cuisine)) {
+      // Remove cuisine if already selected
+      onFormChange('cuisines', formData.cuisines.filter(c => c !== cuisine))
     } else {
-      onFormChange('additionalCuisines', [...formData.additionalCuisines, cuisine])
+      // Add cuisine to the list
+      onFormChange('cuisines', [...formData.cuisines, cuisine])
     }
   }
 
@@ -24,6 +26,16 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
     } else {
       onFormChange('equipment', [...formData.equipment, equipment])
     }
+  }
+
+  const isFormValid = () => {
+    return formData.mainIngredients.trim() !== '' &&
+           formData.cuisines.length > 0 &&
+           formData.mealType !== '' &&
+           formData.timeLimit !== '' &&
+           formData.difficulty !== '' &&
+           formData.spiceLevel !== '' &&
+           formData.equipment.length > 0;
   }
 
   return (
@@ -43,26 +55,10 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
           />
         </div>
 
-        {/* Base Cuisine */}
+        {/* Cuisines */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-3">
-            Base Cuisine
-          </label>
-          <select
-            value={formData.baseCuisine}
-            onChange={(e) => onFormChange('baseCuisine', e.target.value)}
-            className="w-full px-4 py-3 bg-dark-800 border border-gray-600 rounded-xl text-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-200"
-          >
-            {cuisines.map(cuisine => (
-              <option key={cuisine} value={cuisine}>{cuisine}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Additional Cuisines */}
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-3">
-            Additional Cuisines
+            Cuisines <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {cuisines.map(cuisine => (
@@ -70,14 +66,16 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
                 key={cuisine}
                 onClick={() => handleCuisineToggle(cuisine)}
                 className={`pill-button ${
-                  formData.additionalCuisines.includes(cuisine)
-                    ? 'pill-button-selected'
+                  formData.cuisines.includes(cuisine)
+                    ? formData.cuisines[0] === cuisine 
+                      ? 'pill-button-selected ring-2 ring-accent-400 ring-offset-2 ring-offset-dark-900' // Base cuisine highlight
+                      : 'pill-button-selected'
                     : 'pill-button-unselected'
                 }`}
               >
                 {cuisine}
-                {formData.additionalCuisines.includes(cuisine) && (
-                  <X className="w-3 h-3 ml-1" />
+                {formData.cuisines[0] === cuisine && (
+                  <span className="ml-1 text-xs text-accent-300">(Base)</span>
                 )}
               </button>
             ))}
@@ -87,7 +85,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
         {/* Meal Type */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-3">
-            Meal Type
+            Meal Type <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {mealTypes.map(type => (
@@ -109,7 +107,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
         {/* Time Limit */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-3">
-            Time Limit
+            Time Limit <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {timeLimits.map(time => (
@@ -132,7 +130,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
         {/* Difficulty */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-3">
-            Difficulty
+            Difficulty <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {difficulties.map(difficulty => (
@@ -154,7 +152,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
         {/* Spice Level */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-3">
-            Spice Level
+            Spice Level <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {spiceLevels.map(spice => (
@@ -176,7 +174,7 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
         {/* Equipment */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-3">
-            Equipment
+            Equipment <span className="text-red-400">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {equipment.map(item => (
@@ -200,13 +198,24 @@ const RecipeForm = ({ formData, onFormChange, onGenerate, isLoading }) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onGenerate}
-          disabled={isLoading}
-          className="glow-button w-full mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={isLoading || !isFormValid()}
+          className={`glow-button w-full mt-8 ${
+            isFormValid() 
+              ? 'disabled:opacity-50 disabled:cursor-not-allowed' 
+              : 'opacity-50 cursor-not-allowed'
+          }`}
         >
           {isLoading ? (
             <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-2"></div>
-              Generating Recipes...
+              <video 
+                autoPlay 
+                loop 
+                muted 
+                className="w-16 h-16 object-cover rounded-full"
+              >
+                <source src="/video.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           ) : (
             'Generate 3 Recipes'

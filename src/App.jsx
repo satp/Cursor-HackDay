@@ -3,19 +3,19 @@ import { motion, AnimatePresence } from 'framer-motion'
 import HeroSection from './components/HeroSection'
 import RecipeForm from './components/RecipeForm'
 import RecipeResults from './components/RecipeResults'
-import ExploreSection from './components/ExploreSection'
+
 import RecipeModal from './components/RecipeModal'
 
 function App() {
+  
   const [formData, setFormData] = useState({
     mainIngredients: '',
-    baseCuisine: 'Italian',
-    additionalCuisines: [],
+    cuisines: ['Italian'],
     mealType: 'Dinner',
     timeLimit: '30',
     difficulty: 'Easy',
     spiceLevel: 'Medium',
-    equipment: []
+    equipment: ['Pan']
   })
 
   const [recipes, setRecipes] = useState([])
@@ -34,102 +34,29 @@ function App() {
     setIsLoading(true)
     
     try {
-      // Simulate API call to GPT
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Mock response - in real app, this would be the GPT API response
-      const mockRecipes = [
-        {
-          title: "Thai-Italian Fusion Chicken",
-          tagline: "A perfect blend of Thai spices and Italian herbs",
-          ingredients: [
-            "2 chicken breasts",
-            "1 cup jasmine rice",
-            "2 tbsp olive oil",
-            "3 cloves garlic",
-            "1 inch ginger",
-            "2 tbsp soy sauce",
-            "1 tbsp fish sauce",
-            "1 tsp red chili flakes",
-            "Fresh basil",
-            "Lime juice"
-          ],
-          steps: [
-            "Marinate chicken with garlic, ginger, and soy sauce for 30 minutes",
-            "Cook rice according to package instructions",
-            "Heat olive oil in a pan and cook chicken until golden",
-            "Add fish sauce and chili flakes",
-            "Serve with rice, garnish with basil and lime"
-          ],
-          time: "30 min",
-          difficulty: "Easy",
-          spice: "Medium",
-          why_it_works: "The combination of Thai umami flavors with Italian herbs creates a unique fusion that's both familiar and exciting.",
-          image_prompt: "A beautifully plated Thai-Italian fusion chicken dish with golden brown chicken, fluffy jasmine rice, fresh green basil leaves, and lime wedges on a dark ceramic plate"
+      // Call the backend API
+      const response = await fetch('http://localhost:5000/api/generate-recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          title: "Mexican-Japanese Tacos",
-          tagline: "Sushi meets street food in this innovative fusion",
-          ingredients: [
-            "4 corn tortillas",
-            "1 lb fresh tuna",
-            "1 avocado",
-            "1 cucumber",
-            "2 tbsp mayonnaise",
-            "1 tbsp sriracha",
-            "1 tsp wasabi",
-            "Sesame seeds",
-            "Nori sheets",
-            "Pickled ginger"
-          ],
-          steps: [
-            "Cut tuna into small cubes and mix with mayonnaise, sriracha, and wasabi",
-            "Warm tortillas on a dry pan",
-            "Layer avocado, tuna mixture, and cucumber on tortillas",
-            "Sprinkle with sesame seeds and crumbled nori",
-            "Serve with pickled ginger on the side"
-          ],
-          time: "15 min",
-          difficulty: "Easy",
-          spice: "Medium",
-          why_it_works: "The fresh flavors of sushi combined with the convenience of tacos create a perfect fusion of Japanese precision and Mexican comfort.",
-          image_prompt: "Colorful Mexican-Japanese fusion tacos with fresh tuna, avocado, and cucumber, topped with sesame seeds and nori, served on a rustic wooden board"
-        },
-        {
-          title: "Indian-Greek Curry",
-          tagline: "Mediterranean meets the subcontinent",
-          ingredients: [
-            "1 lb lamb shoulder",
-            "1 cup Greek yogurt",
-            "2 tbsp olive oil",
-            "1 onion",
-            "4 cloves garlic",
-            "1 inch ginger",
-            "2 tbsp curry powder",
-            "1 tsp oregano",
-            "1 tsp cumin",
-            "Fresh mint",
-            "Feta cheese"
-          ],
-          steps: [
-            "Marinate lamb in yogurt, garlic, and ginger for 2 hours",
-            "Heat olive oil and sauté onions until golden",
-            "Add lamb and brown on all sides",
-            "Add curry powder, oregano, and cumin",
-            "Simmer until lamb is tender",
-            "Garnish with fresh mint and crumbled feta"
-          ],
-          time: "60+ min",
-          difficulty: "Advanced",
-          spice: "Hot",
-          why_it_works: "The tenderizing properties of Greek yogurt combined with Indian spices create a unique fusion that's both rich and aromatic.",
-          image_prompt: "Rich Indian-Greek fusion curry with tender lamb pieces in a golden sauce, garnished with fresh mint leaves and crumbled white feta cheese, served in a deep ceramic bowl"
-        }
-      ]
+        body: JSON.stringify(formData)
+      })
       
-      setRecipes(mockRecipes)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to generate recipes')
+      }
+      
+      setRecipes(data.recipes)
     } catch (error) {
       console.error('Error generating recipes:', error)
+      alert('Failed to generate recipes. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -140,16 +67,10 @@ function App() {
     setShowModal(true)
   }
 
-  const handleExploreClick = (cuisines) => {
-    setFormData(prev => ({
-      ...prev,
-      baseCuisine: cuisines[0],
-      additionalCuisines: cuisines.slice(1)
-    }))
-  }
+
 
   return (
-    <div className="min-h-screen bg-dark-950">
+    <div className="min-h-screen bg-black">
       <div className="container mx-auto px-4 py-8">
         <HeroSection />
         
@@ -167,30 +88,45 @@ function App() {
           />
         </motion.div>
 
-        {recipes.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-16"
-          >
-            <RecipeResults 
-              recipes={recipes}
-              onRecipeClick={handleRecipeClick}
-            />
-          </motion.div>
-        )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16"
-        >
-          <ExploreSection onExploreClick={handleExploreClick} />
-        </motion.div>
+
+
       </div>
 
+      {/* Recipe Results Overlay */}
+      <AnimatePresence>
+        {recipes.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-dark-900 rounded-2xl p-6 max-w-6xl w-full max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-3xl font-bold text-gradient">Your Fusion Recipes</h2>
+                <button
+                  onClick={() => setRecipes([])}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+              <RecipeResults 
+                recipes={recipes}
+                onRecipeClick={handleRecipeClick}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Recipe Detail Modal */}
       <AnimatePresence>
         {showModal && selectedRecipe && (
           <RecipeModal

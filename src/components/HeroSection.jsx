@@ -37,10 +37,11 @@ const HeroSection = () => {
         >
           <div className="relative">
             <div className="w-64 h-64 mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-500/20 to-teal-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
-              <div className="relative w-full h-full bg-gradient-to-br from-accent-400 to-teal-400 rounded-full flex items-center justify-center">
-                <div className="text-6xl">🍖</div>
-              </div>
+              <img 
+                src="/food.png" 
+                alt="Delicious fusion cuisine"
+                className="w-full h-full object-cover rounded-full shadow-2xl"
+              />
             </div>
           </div>
         </motion.div>

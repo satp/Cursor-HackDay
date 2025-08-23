@@ -44,9 +44,23 @@ const RecipeResults = ({ recipes, onRecipeClick }) => {
             className="recipe-card cursor-pointer group"
             onClick={() => onRecipeClick(recipe)}
           >
-            {/* Recipe Image Placeholder */}
-            <div className="w-full h-48 bg-gradient-to-br from-accent-500/20 to-teal-500/20 rounded-xl mb-4 flex items-center justify-center group-hover:from-accent-500/30 group-hover:to-teal-500/30 transition-all duration-300">
-              <div className="text-4xl">🍽️</div>
+            {/* Recipe Image */}
+            <div className="w-full h-48 rounded-xl mb-4 overflow-hidden group-hover:scale-105 transition-all duration-300">
+              {recipe.imageUrl ? (
+                <img 
+                  src={recipe.imageUrl} 
+                  alt={recipe.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback to a simple colored div with emoji
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div className="w-full h-full bg-gradient-to-br from-accent-500/20 to-teal-500/20 flex items-center justify-center group-hover:from-accent-500/30 group-hover:to-teal-500/30 transition-all duration-300" style={{ display: recipe.imageUrl ? 'none' : 'flex' }}>
+                <div className="text-4xl">🍽️</div>
+              </div>
             </div>
             
             {/* Recipe Title */}
