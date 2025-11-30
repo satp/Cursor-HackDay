@@ -25,7 +25,7 @@ const HeroSection = () => {
               fontStyle: 'normal !important'
             }}
           >
-            FlavorForge
+            FlavorForges
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, x: -50 }}
